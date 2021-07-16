@@ -47,8 +47,6 @@ impl IO {
             bg_color: default_color()
         }
     }
-    // FIXME why am I substracting. rect suppose to be for all panels. just make the draw rect
-    // based on the offset.
     fn init_rects() -> [[sdl2::rect::Rect; screen_size().0/block_size()]; screen_size().1/block_size()] {
         let mut rects = [[sdl2::rect::Rect::new(0, 0, 1, 1); screen_size().0/block_size()]; screen_size().1/block_size()];
         for j in 0..(screen_size().1/block_size()) {
@@ -68,12 +66,27 @@ impl IO {
         for j in 0..board::board_size().1 {
             for i in 0..board::board_size().0 {
                self.canvas.set_draw_color(color(game_board.board[j][i]).unwrap());
-               self.canvas.fill_rect(self.rects[j][i]).unwrap();
+               self.canvas.fill_rect(self.rects[j + self.y_offset/block_size()][i + self.x_offset/block_size()]).unwrap();
+               self.canvas.draw_rect(self.rects[j + self.y_offset/block_size()][i + self.x_offset/block_size()]).unwrap();
             }
         }
         self.canvas.set_draw_color(self.bg_color);
     }
+    pub fn draw_overlay(&mut self) {
+        let border_left = sdl2::rect::Rect::new(
+            (self.x_offset - block_size()).try_into().unwrap(),
+            0,
+            block_size().try_into().unwrap(),
+            screen_size().1.try_into().unwrap());
+        let border_right = sdl2::rect::Rect::new(
+            (self.x_offset + board::board_size().0*block_size()).try_into().unwrap(),
+            0,
+            block_size().try_into().unwrap(),
+            screen_size().1.try_into().unwrap());
+        self.canvas.set_draw_color(Color::GRAY);
+        self.canvas.fill_rect(border_left).unwrap();
+        self.canvas.fill_rect(border_right).unwrap();
+        self.canvas.set_draw_color(self.bg_color);
+    }
 }
-
-
 

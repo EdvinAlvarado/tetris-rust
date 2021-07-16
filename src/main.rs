@@ -66,7 +66,9 @@ fn main() {
                 piece = Tetromino::new(piece_type);
             }
         }
+        board.write_board(pos.x, pos.y, &piece);
         io.draw_board(&board);
+        io.draw_overlay();
         io.canvas.present();
         std::thread::sleep(Duration::from_millis(50));
     }
