@@ -1,9 +1,7 @@
 use std::convert::TryInto;
 use std::time::{Duration, Instant};
 
-// TODO check why linter says its wrong while it still works
 extern crate rand;
-// use rand::prelude::*;
 use rand::{Rng, thread_rng};
 
 extern crate sdl2;
@@ -18,13 +16,13 @@ use board::Board;
 mod interface;
 use interface::IO;
 
-
 struct Position {
     x: usize,
     y: usize,
 }
 
 fn main() {
+    // Init randomizer
     let mut rng = thread_rng();
     // Init SDL and interface
     let sdl_context = sdl2::init().unwrap();
@@ -36,7 +34,7 @@ fn main() {
     io.canvas.clear();
     io.canvas.present();
     // Init game logic
-    let mut pos = Position{x: board::board_size().0, y: 0};
+    let mut pos = Position{x: board::board_size().0/2, y: 0};
     let mut piece_type: u32 = rng.gen_range(1..=7);
     let mut piece = Tetromino::new(piece_type);
     let mut board = Board{..Default::default()};
@@ -48,11 +46,11 @@ fn main() {
         'event: for event in event_pump.poll_iter() {
             match event {
                 Event::Quit{..} | Event::KeyDown{keycode: Some(Keycode::Escape), ..}    => {break 'main},
-                _                                                                       => {},
                 Event::KeyDown{keycode: Some(Keycode::Down), ..} => {if !is_blocked.down {pos.y += 1;}},
                 Event::KeyDown{keycode: Some(Keycode::Left), ..} => {if !is_blocked.left {pos.x -= 1;}},
                 Event::KeyDown{keycode: Some(Keycode::Right), ..} => {if !is_blocked.right {pos.x += 1;}},
                 Event::KeyDown{keycode: Some(Keycode::Z), ..} => {if !is_blocked.rotate {piece.rotate();}},
+                _                                                                       => {},
             }
             break 'event;
         }

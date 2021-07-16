@@ -42,8 +42,8 @@ fn tetromino_pieces(piece_type: u32) -> Result<[[u32; piece_size()]; piece_size(
         7 =>    Ok([
                 [0,0,0,0,0],
                 [0,0,1,0,0],
-                [0,0,1,1,0],
-                [0,0,0,1,0],
+                [0,1,1,1,0],
+                [0,0,0,0,0],
                 [0,0,0,0,0]]),
         _ =>    Err("piece type not supported".to_string())
     }
@@ -57,7 +57,7 @@ fn tetromino_dimensions(piece_type: u32) -> Result<[usize; 4],String> {
         4 => Ok([1,1,2,2]),
         5 => Ok([2,1,1,1]),
         6 => Ok([1,1,2,1]),
-        7 => Ok([2,1,1,1]),
+        7 => Ok([1,1,1,2]),
         _ => Err("piece type is supported".to_string())
     }
 }
