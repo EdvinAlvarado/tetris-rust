@@ -84,6 +84,7 @@ impl Tetromino {
                 rotated_tetro[y][x] = self.tetro[piece_size()-1-x][y];
             }
         }
+        // Rotate pos_delta
         let mut temp_arr = [0; 4];
         for i in 0..self.pos_delta.len() {
             match i {
@@ -99,6 +100,12 @@ impl Tetromino {
     }
     pub fn v_iter(&self) -> impl Iterator<Item=usize> {
         self.pos_delta[1]..(piece_size()-self.pos_delta[3])
+    }
+    pub fn width(&self) -> usize {
+        piece_size() - self.pos_delta[2] - self.pos_delta[0]
+    }
+    pub fn height(&self) -> usize {
+        piece_size() - self.pos_delta[3] - self.pos_delta[1]
     }
 }
 
