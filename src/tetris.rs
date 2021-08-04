@@ -95,18 +95,6 @@ impl Tetromino {
         self.pos_delta  = temp_arr;
         self.tetro      = rotated_tetro;
     }
-    pub fn h_iter(&self) -> impl Iterator<Item=usize> {
-        self.pos_delta[0]..(piece_size()-self.pos_delta[2])
-    }
-    pub fn v_iter(&self) -> impl Iterator<Item=usize> {
-        self.pos_delta[1]..(piece_size()-self.pos_delta[3])
-    }
-    pub fn width(&self) -> usize {
-        piece_size() - self.pos_delta[2] - self.pos_delta[0]
-    }
-    pub fn height(&self) -> usize {
-        piece_size() - self.pos_delta[3] - self.pos_delta[1]
-    }
 }
 
 // permits printing
