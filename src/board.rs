@@ -86,8 +86,6 @@ impl Board {
             }
         }
     }
-    // FIXME fixed handling of directions
-    #[allow(unused_must_use)]
     pub fn collision_checker(& self, x: i32, y: i32, piece: &tetris::Tetromino) -> Blocked {
         let mut pi =  *piece;
         pi.rotate();
@@ -96,18 +94,19 @@ impl Board {
         for j in 0..tetris::piece_size() {
             for i in 0..tetris::piece_size() {
                 if piece.tetro[j][i] > 0 {
-                    if pos_handler(i,x-1).is_err() {dir.left == true;}
-                    else if self.back_board[ph_u!(j,y)][ph_u!(i,x-1)] > 0 {dir.left = true;}
-                    
-                    if ph_uod!(i,x+1) >= board_size().0 - 1 {dir.right == true;}
-                    else if self.back_board[ph_u!(j,y)][ph_u!(i,x+1)] > 0 {dir.right = true;}
-                    
-                    if ph_u!(j,y) >= board_size().1 - 1 {dir.down == true;}
-                    else if self.back_board[ph_u!(j,y+1)][ph_uod!(i,x)] > 0 {dir.down = true;}
+                    // Check Left
+                    if pos_handler(i,x-1).is_err()  {dir.left |= true;}
+                    else if self.back_board[ph_u!(j,y)][ph_u!(i,x-1)] > 0 {dir.left |= true;}
+                    // Check Right
+                    if ph_u!(i,x+1) > board_size().0 - 1 {dir.right |= true;}
+                    else if self.back_board[ph_u!(j,y)][ph_u!(i,x+1)] > 0 {dir.right |= true;}
+                    // Check Down
+                    if ph_u!(j,y+1) > board_size().1 - 1 {dir.down |= true;}
+                    else if self.back_board[ph_u!(j,y+1)][ph_uod!(i,x)] > 0 {dir.down |= true;}
                 }
                 if pi.tetro[j][i] > 0 {
                     // left || right || down || overlap
-                    if pos_handler(i,x).is_err() || ph_uod!(i,x) >= board_size().0 || ph_uod!(j,y) >= board_size().1 || self.back_board[ph_uod!(j,y)][ph_uod!(i,x)] > 0 {dir.rotate = true;}
+                    if pos_handler(i,x).is_err() || ph_uod!(i,x) >= board_size().0 || ph_uod!(j,y) >= board_size().1 || self.back_board[ph_uod!(j,y)][ph_uod!(i,x)] > 0 {dir.rotate |= true;}
                 }
             }
         }
