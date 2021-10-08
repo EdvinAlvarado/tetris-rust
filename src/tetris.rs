@@ -62,11 +62,11 @@ fn tetromino_dimensions(piece_type: u32) -> Result<[usize; 4],String> {
     }
 }
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug)]
 pub struct Tetromino {
     pub piece_type: u32,
     pub tetro:      [[u32; piece_size()]; piece_size()],
-    pub pos_delta: [usize; 4],
+    pub pos_delta:  [usize; 4],
 }
 
 impl Tetromino {
@@ -96,13 +96,3 @@ impl Tetromino {
         self.tetro      = rotated_tetro;
     }
 }
-
-// permits printing
-impl fmt::Debug for Tetromino {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("Tetromino")
-        .field("piece_type", &self.piece_type)
-        .field("tetro", &self.tetro)
-        .finish()
-    }
-} 
